@@ -5,7 +5,7 @@ CS504 first homework
 
 写这个之前先去研究了下[如何编写README.md](https://guides.github.com/features/mastering-markdown/)，不想看英文的看[这里](https://github.com/guodongxiaren/README)
 
-很感谢有[满分作业](https://github.com/xujiahaha/CS504-running-information-analysis-service)带路，写的真的好啊，不要介意我抄一下:joy: 好了开始写正题。
+很感谢有[满分作业](https://github.com/xujiahaha/CS504-running-information-analysis-service)带路，写的真的好啊，不要介意我抄哈:joy: 如果要收版费我交啊，好了开始写正题。
 
 ***
 **running-information-analysis-service** is a [RESTful](http://www.cnblogs.com/loveis715/p/4669091.html) service in spring boot, using [Maven](https://maven.apache.org/) as build tool.
@@ -63,9 +63,161 @@ CS504 first homework
     mvn clean install
     java -jar ./target/running-information-analysis-service-1.0.0.BUILD-SNAPSHOT.jar
     
-### 5.Upload runningInfo.json data
+#### 5.Upload runningInfo.json data
 >Run the command uhder the directory `.../CS504-running-information-analysis-service`.
 
     curl -H "Content-Type: application/json" localhost:8080/runningInfo -d @runningInfo.json
->你也可以通过Chrome插件Postman来将Json数据插入数据库（在Chrome的App里查找），最后我是使用这个插件进行测试的，当然你也可以去[官网](https://www.getpostman.com/apps)直接下载安装。
+>你也可以通过Chrome插件Postman来将Json数据插入数据库（在Chrome的App里查找），最后我是使用这个插件进行测试的，当然你也可以去[Psotman官网](https://www.getpostman.com/apps)直接下载安装。
 
+
+
+<br><br><br>
+## API Overview
+    Check API References for detailed information
+Method | URL | Description
+------------ | ------------- | -------------
+Post | /runningInfo/uploadInfoList | upload a list of runningInfo
+Delete | /runningInfo/purge | delete all runningInfo
+Delete | /runningInfo/{runningId} | delete one runningInfo by runningId
+Get | /runningInfo/findByRunningId/{runningId} | get one runningInfo by runningId
+Get | /runningInfo/findByUsername/{username} | get all runningInfo by username, order by heartRate. desc.
+Get | /runningInfo | get all runningInfo with pagination and sort
+
+
+## API References
+#### 1.upload a list of runningInfo
+   URL: `/runningInfo/uploadInfoList`<br>
+   HTTP Method: **POST**<br>
+   Success Response: 201 (CREATE)<br>
+  
+Data Example:<br>
+
+    [
+        {
+            "runningId": "7c08973d-bed4-4cbd-9c28-9282a02a6032",
+            "latitude": "38.9093216",
+            "longitude": "-77.0036435",
+            "runningDistance": "39492",
+            "totalRunningTime": "2139.25",
+            "heartRate": 0,
+            "timestamp": "2017-04-01T18:50:35Z",
+            "userInfo": {
+                "username": "ross0",
+                "address": "504 CS Street, Mountain View, CA 88888"
+            }
+        }
+    ]
+
+#### 2.delete all runningInfo
+   URL: `/runningInfo/purge`<br>
+   HTTP Method: **DELETE**<br>
+   Success Response: 200 (OK)<br>
+  
+#### 3.delete runningInfo by runningId
+   URL: `/runningInfo/{runningId}`<br>
+   HTTP Method: **DELETE**<br>
+   URL Params: runningId **(required)**<br>
+   Success Response: 200 (OK)<br>
+  
+Example:<br>
+
+    /runningInfo/fb0b4725-ac25-4812-b425-d43a18c958bb
+  
+#### 4.Find runningInfo by runningId
+   URL: `/runningInfo/findByRunningId/{runningId}`<br>
+   HTTP Method: **GET**<br>
+   URL Params: runningId **(required)**<br>
+   Success Response: 200 (OK)<br>
+   Error Response: 404 (Not Found)<br>
+  
+  Example:<br>
+
+    /runningInfo/findByRunningId/fb0b4725-ac25-4812-b425-d43a18c958bb
+    
+#### 5.Find runningInfo by username
+   URL: `/runningInfo/findByUsername/{usename}`<br>
+   HTTP Method: **GET**<br>
+   URL Params: usename **(required)**<br>
+   Success Response: 200 (OK)<br>
+  
+   Optional URL Params:<br>
+   
+Param|Optional|Description|Default Value|Example
+------------ | ------------- | ------------- | ------------- | -------------
+page|yes|set page number|0|page=1
+size|yes|set page size|2|size=5
+  
+  
+  Example:<br>
+
+    /runningInfo/findByUsername/ross0
+    /runningInfo/findByUsername/ross0?page=0
+    /runningInfo/findByUsername/ross0?page=0&size=3
+    
+  Sample Response:<br>
+  
+    [
+        {
+            "runningId": "2f3c321b-d239-43d6-8fe0-c035ecdff232",
+            "totalRunningTime": 85560.23,
+            "heartRate": 189,
+            "userName": "ross2",
+            "userAddress": "504 CS Street, Mountain View, CA 88888",
+            "healthWarningLevel": "HIGH"
+        },
+        {
+            "runningId": "2f3c321b-d239-43d6-8fe0-c035ecdff231",
+            "totalRunningTime": 85431.23,
+            "heartRate": 179,
+            "userName": "ross2",
+            "userAddress": "504 CS Street, Mountain View, CA 88888",
+            "healthWarningLevel": "HIGH"
+        }
+    ]
+    
+#### 6.Find all runningInfo with sort and pagination
+   URL: `/runningInfo`<br>
+   HTTP Method: **GET**<br>
+   URL Params: usename **(required)**<br>
+   Success Response: 200 (OK)<br>
+  
+   Optional URL Params:<br>
+   
+Param | Optional | Description | Default Value | Example
+------------ | ------------- | ------------- | ------------- | -------------
+page | yes | set page number | 0 | page=1
+size | yes | set page size | 2 | size=5
+sortDir | yes | set sort direction (asc or desc) | desc | sortDir=asc
+sortBy | yes | set sort property | heartRate | sortBy=totalRunningTime
+
+
+  Example:<br>
+
+    /runningInfo
+    /runningInfo?page=1
+    /runningInfo?page=1&size=4
+    /runningInfo?page=1&size=4&sortDir=asc
+    /runningInfo?page=1&size=4&sortDir=asc&sortBy=totalRunningTime
+    
+  Sample Response:<br>
+  
+    [
+        {
+            "runningId": "07e8db69-99f2-4fe2-b65a-52fbbdf8c32c",
+            "totalRunningTime": 3011.23,
+            "heartRate": 198,
+            "userName": "ross1",
+            "userAddress": "504 CS Street, Mountain View, CA 88888",
+            "healthWarningLevel": "HIGH"
+        },
+        {
+            "runningId": "fb0b4725-ac25-4812-b425-d43a18c958bb",
+            "totalRunningTime": 123,
+            "heartRate": 189,
+            "userName": "ross4",
+            "userAddress": "504 CS Street, Mountain View, CA 88888",
+            "healthWarningLevel": "HIGH"
+        }
+    ]
+  
+    
