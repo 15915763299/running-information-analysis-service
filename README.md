@@ -3,7 +3,7 @@ CS504 first homework
 
 国内的小渣渣表示，踩了无数的坑终于把第一次作业完成了。毕竟曾经只用过win98/win7，现在用Linux，感谢BitTiger打开了我新世界的大门......（踩坑过程全程记录，欢迎交流）。
 
-写这个之前先去研究了下[如何编写README.md](https://guides.github.com/features/mastering-markdown/)，不想看英文的看[这里](https://github.com/guodongxiaren/README)
+写这个之前先去研究了下[如何编写README.md](https://guides.github.com/features/mastering-markdown/)，不想看英文的看[这里](https://github.com/guodongxiaren/README)，还有[.gitignore的简单介绍](http://www.cnblogs.com/haiq/archive/2012/12/26/2833746.html)。
 
 很感谢有[满分作业](https://github.com/xujiahaha/CS504-running-information-analysis-service)带路，写的真的好啊，不要介意我抄哈:joy: 如果要收版费我交啊，好了开始写正题。
 
